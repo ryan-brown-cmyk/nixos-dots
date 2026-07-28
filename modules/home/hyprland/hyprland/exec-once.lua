@@ -1,0 +1,5 @@
+hl.on("hyprland.start", function()
+	hl.exec_cmd("killall -q waybar; sleep .5 && waybar")
+	hl.exec_cmd("killall -q mako; sleep .5 && mako")
+	hl.exec_cmd("nm-applet --indicator")
+end)

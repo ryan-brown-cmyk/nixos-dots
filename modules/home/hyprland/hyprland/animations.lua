@@ -1,0 +1,1 @@
+-- As per usual, reference the hyprland wiki.
