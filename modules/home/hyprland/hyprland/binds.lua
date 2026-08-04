@@ -1,5 +1,14 @@
 -- As always, reference hypr wiki.
 
+-- disable trackpad while typing, because I have a large and sensitive trackpad
+hl.config({
+	input = {
+		touchpad = {
+			disable_while_typing = true,
+		},
+	},
+})
+
 -- APPLICATION EXECS
 hl.bind("SUPER + Return", hl.dsp.exec_cmd("kitty"), { description = "Launch Terminal" })
 hl.bind("SUPER + B", hl.dsp.exec_cmd("firefox"), { description = "Open Firefox" }) -- CHANGE if want a different browser.

@@ -2,6 +2,7 @@
   configs,
   pkgs,
   inputs,
+  config,
   ...
 }:
 {
@@ -14,8 +15,10 @@
     vimPlugins.LazyVim
     nodejs
     inputs.sidra.packages.${system}.default
-    rustup
     cargo
+    rust-analyzer
+    rustfmt
+    rustc
     ddcutil
     libreoffice-qt
     hunspell
@@ -56,5 +59,12 @@
       turbo = "auto";
     };
   };
-
+  # The below is so we can have a formatted list to prune ZaneyOS easier.
+  environment.etc."current-system-packages".text =
+    let
+      packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
+      sortedUnique = builtins.sort builtins.lessThan (pkgs.lib.lists.unique packages);
+      formatted = builtins.concatStringsSep "\n" sortedUnique;
+    in
+    formatted;
 }

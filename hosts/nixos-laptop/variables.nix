@@ -34,7 +34,7 @@
 
   # Bar/Shell Settings
   # Choose between noctalia or waybar
-  barChoice = "waybar";
+  # barChoice = "waybar";
 
   # Waybar Settings (used when barChoice = "waybar")
   clock24h = false;
@@ -122,7 +122,7 @@
   #waybarChoice = ../../modules/home/waybar/waybar-jak-ml4w-modern.nix;
   #waybarChoice = ../../modules/home/waybar/waybar-jak-oglo-simple.nix;
   #waybarChoice = ../../modules/home/waybar/waybar-jwt-catppuccin.nix;
-  waybarChoice = ../../modules/home/waybar/waybar-jwt-transparent.nix;
+  # waybarChoice = ../../modules/home/waybar/waybar-jwt-transparent.nix;
   #waybarChoice = ../../modules/home/waybar/waybar-jwt-ultradark.nix;
   #waybarChoice = ../../modules/home/waybar/waybar-pctrade-catppuccin.nix;
   #waybarChoice = ../../modules/home/waybar/waybar-old-ddubsos.nix;
@@ -131,7 +131,7 @@
   # Available options are:
   #animChoice = ../../modules/home/hyprland/animations-def.nix;
   #animChoice = ../../modules/home/hyprland/animations-end4.nix;
-  animChoice = ../../modules/home/hyprland/animations-end4-slide.nix;
+  # animChoice = ../../modules/home/hyprland/animations-end4-slide.nix;
   # animChoice = ../../modules/home/hyprland/animations-end-slide.nix;
   # animChoice = ../../modules/home/hyprland/animations-dynamic.nix;
   #animChoice = ../../modules/home/hyprland/animations-moving.nix;

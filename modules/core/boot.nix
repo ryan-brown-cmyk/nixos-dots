@@ -23,8 +23,5 @@
       magicOrExtension = ''\x7fELF....AI\x02'';
     };
     plymouth.enable = true;
-    loader.grub.extraEntries = ''
-      GRUB_CMDLINE_LINUX=quiet splash acpi_backlight=native
-    '';
   };
 }

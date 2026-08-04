@@ -21,10 +21,10 @@
   };
   # Aliases to make `ls`, `ll`, `la` use eza
   home.shellAliases = {
-    ls = "eza";
-    lt = "eza --tree --level=2";
-    ll = "eza  -lh --no-user --long";
-    la = "eza -lah ";
+    ls = "eza --hyperlink=auto";
+    lt = "eza --hyperlink=auto --tree --level=2";
+    ll = "eza  --hyperlink=auto -lh --no-user --long";
+    la = "eza -lah --hyperlink=auto";
     tree = "eza --tree ";
   };
 }

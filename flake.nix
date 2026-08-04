@@ -11,17 +11,11 @@
     stylix.url = "github:danth/stylix/master";
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
 
-    noctalia = {
-      url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Checking nixvim to see if it's better
-    #nixvim = {
-    #  url = "github:nix-community/nixvim";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
-    # RB: I use a .lua nvim for portability.
+    # noctalia = {
+    #   url = "github:noctalia-dev/noctalia";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    # Removed in favor of Caelestia Shell, but will probably still change all of it.
 
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake/beta";
@@ -38,47 +32,55 @@
     sidra = {
       url = "github:wimpysworld/sidra";
     };
-  };
-
-  outputs = {
-    nixpkgs,
-    home-manager,
-    nixvim,
-    nix-flatpak,
-    alejandra,
-    ...
-  } @ inputs: let
-    system = "x86_64-linux";
-    host = "nixos-laptop";
-    profile = "nvidia-laptop";
-    username = "ryanb";
-
-    # Deduplicate nixosConfigurations while preserving the top-level 'profile'
-    mkNixosConfig = gpuProfile:
-      nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile; # keep using the let-bound profile for modules/scripts
-        };
-        modules = [
-          ./modules/core/overlays.nix
-          ./profiles/${gpuProfile}
-          nix-flatpak.nixosModules.nix-flatpak
-        ];
-      };
-  in {
-    nixosConfigurations = {
-      amd = mkNixosConfig "amd";
-      nvidia = mkNixosConfig "nvidia";
-      nvidia-laptop = mkNixosConfig "nvidia-laptop";
-      amd-nvidia-hybrid = mkNixosConfig "amd-nvidia-hybrid";
-      intel = mkNixosConfig "intel";
-      vm = mkNixosConfig "vm";
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    formatter.x86_64-linux = inputs.alejandra.packages.x86_64-linux.default;
   };
+
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      nixvim,
+      nix-flatpak,
+      alejandra,
+      ...
+    }@inputs:
+    let
+      system = "x86_64-linux";
+      host = "nixos-laptop";
+      profile = "nvidia-laptop";
+      username = "ryanb";
+
+      # Deduplicate nixosConfigurations while preserving the top-level 'profile'
+      mkNixosConfig =
+        gpuProfile:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            inherit username;
+            inherit host;
+            inherit profile; # keep using the let-bound profile for modules/scripts
+          };
+          modules = [
+            ./modules/core/overlays.nix
+            ./profiles/${gpuProfile}
+            nix-flatpak.nixosModules.nix-flatpak
+          ];
+        };
+    in
+    {
+      nixosConfigurations = {
+        amd = mkNixosConfig "amd";
+        nvidia = mkNixosConfig "nvidia";
+        nvidia-laptop = mkNixosConfig "nvidia-laptop";
+        amd-nvidia-hybrid = mkNixosConfig "amd-nvidia-hybrid";
+        intel = mkNixosConfig "intel";
+        vm = mkNixosConfig "vm";
+      };
+
+      formatter.x86_64-linux = inputs.alejandra.packages.x86_64-linux.default;
+    };
 }

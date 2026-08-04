@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   home.packages = with pkgs; [
     python3Packages.pip # Python package installer
     python3Packages.virtualenv # Virtual environment tool
@@ -25,11 +25,13 @@
     text = ''
       #!/bin/sh
       # Use python3 with the correct package path
-      exec ${pkgs.python3.withPackages (p: [p.requests])}/bin/python3 $HOME/.config/waybar/scripts/Weather.py "$@"
+      exec ${
+        pkgs.python3.withPackages (p: [ p.requests ])
+      }/bin/python3 $HOME/.config/waybar/scripts/Weather.py "$@"
     '';
     executable = true;
   };
 
   # Set Python path in environment
-  home.sessionPath = ["${pkgs.python3}/bin"];
+  home.sessionPath = [ "${pkgs.python3}/bin" ];
 }
