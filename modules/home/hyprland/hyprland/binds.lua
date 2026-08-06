@@ -9,26 +9,33 @@ hl.config({
 	},
 })
 
+hl.config({
+	misc = {
+		key_press_enables_dpms = true,
+		mouse_move_enables_dpms = true,
+	},
+})
+
 -- APPLICATION EXECS
 hl.bind("SUPER + Return", hl.dsp.exec_cmd("kitty"), { description = "Launch Terminal" })
 hl.bind("SUPER + B", hl.dsp.exec_cmd("firefox"), { description = "Open Firefox" }) -- CHANGE if want a different browser.
-hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("rofi -show drun"), { description = "Open Application Launcher" })
+hl.bind("SUPER + SPACE", hl.dsp.global("caelestia:launcher"), { description = "Open Application Launcher" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd("sidra"), { description = "Open Music Player" })
 
 -- WINDOW MANAGEMENT
 hl.bind("SUPER + Q", hl.dsp.window.close(), { description = "Close Active Window" })
-hl.bind("SUPER + SHIFT + H", hl.dsp.focus({ direction = "left" }), { description = "Change Active Workspace (Left)" })
-hl.bind("SUPER + SHIFT + L", hl.dsp.focus({ direction = "right" }), { description = "Change Active Workspace (Right)" })
-hl.bind(
-	"SUPER + SHIFT + Left",
-	hl.dsp.focus({ direction = "left" }),
-	{ description = "Change Active Workspace (Left)" }
-)
+hl.bind("SUPER + SHIFT + H", hl.dsp.focus({ direction = "left" }), { description = "Move Focus to Window (Left)" })
+hl.bind("SUPER + SHIFT + L", hl.dsp.focus({ direction = "right" }), { description = "Move Focus to Window (Right)" })
+hl.bind("SUPER + SHIFT + J", hl.dsp.focus({ direction = "down" }), { description = "Move Focus to Window (Down)" })
+hl.bind("SUPER + SHIFT + K", hl.dsp.focus({ direction = "up" }), { description = "Move Focus to Window (Up)" })
+hl.bind("SUPER + SHIFT + Left", hl.dsp.focus({ direction = "left" }), { description = "Move Focus to Window (Left)" })
 hl.bind(
 	"SUPER + SHIFT + Right",
 	hl.dsp.focus({ direction = "right" }),
-	{ description = "Change Active Workspace (Right)" }
+	{ description = "Move Focus to Window (Right)" }
 )
+hl.bind("SUPER + SHIFT + Down", hl.dsp.focus({ direction = "down" }), { description = "Move Focus to Window (Down)" })
+hl.bind("SUPER + SHIFT + Up", hl.dsp.focus({ direction = "up" }), { description = "Move Focus to Window (Up)" })
 
 -- taken from hl wiki --
 hl.config({
@@ -47,8 +54,7 @@ hl.bind("SUPER + K", hl.dsp.window.move({ direction = "up" }), { description = "
 hl.bind("SUPER + L", hl.dsp.window.move({ direction = "right" }), { description = "Move Window Right" })
 
 hl.bind("SUPER + R", function()
-	hl.dsp.window.cycle_next()
-	hl.dsp.window.bring_to_top()
+	hl.dsp.layout("cyclenext")
 end, { description = "Cycle to Next Window" })
 
 hl.bind(
@@ -90,20 +96,50 @@ hl.bind(
 	{ description = "Show Special Workspace" }
 )
 
+-- hl.bind("SUPER + T", function()
+--  local ws = hl.get_active_workspace() or "null"
+--  local layout = ws.tiled_layout -- Returns "dwindle", "master", "scrolling", or "monocle"
+--  if layout == "master" then
+--    hl.config({ dwindle = { preserve_split = true } })
+--  elseif layout == "dwindle" then
+--    hl.config({ master = { new_status = "master" } })
+--  else
+--    hl.config({ dwindle = { preserve_split = true } })
+--  end
+--  hl.exec_cmd("hyprctl reload")
+-- end, { description = "Switch Between Master and Dwindle Layout" })
+
 hl.bind("SUPER + T", function()
-	local ws = hl.get_active_workspace() or "null"
-	local layout = ws.tiled_layout -- Returns "dwindle", "master", "scrolling", or "monocle"
-	if layout == "master" then
-		hl.dsp.layout("dwindle")
-	elseif layout == "dwindle" then
-		hl.dsp.layout("master")
-	else
-		hl.dsp.layout("dwindle") -- set to toggle if it's something weird.
+	local layouts = { "scrolling", "dwindle", "master" }
+	local workspace = hl.get_active_workspace()
+	if hl.get_active_special_workspace() then
+		workspace = hl.get_active_special_workspace()
 	end
-end, { description = "Switch Between Master and Dwindle Layout" })
+
+	local next_layout = "dwindle"
+
+	if not workspace then
+		return
+	end
+
+	for i = 1, #layouts do
+		if layouts[i] == workspace.tiled_layout then
+			local next_layout_idx = (i % #layouts) + 1
+			next_layout = layouts[next_layout_idx]
+			break
+		end
+	end
+
+	if workspace.special then
+		hl.workspace_rule({ workspace = tostring(workspace.name), layout = next_layout })
+	else
+		hl.workspace_rule({ workspace = tostring(workspace.id), layout = next_layout })
+	end
+end)
+-- taken from wiki!
 
 -- LOCK KEYBINDS
-hl.bind("SUPER + CONTROL + L", hl.dsp.exec_cmd("brightnessctl -d '*::kbd_backlight' set 0% & hyprlock"))
+hl.bind("SUPER + CONTROL + L", hl.dsp.global("caelestia:lock"))
 
 -- VARIOUS CONTROL WEIRD KEYS
 --   Audio Keys

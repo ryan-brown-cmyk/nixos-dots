@@ -9,6 +9,6 @@
 require("binds")
 require("monitors")
 require("exec-once")
--- require("animations") -- AWAITING ME DOING THIS
--- require("windowRules") -- AWAITING ME DOING THIS
+require("animations")
+require("window-rules")
 -- require("env") -- Controlled by NixOS config files. This is beause it will be different per machine (ish).

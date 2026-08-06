@@ -35,6 +35,25 @@
         }
       ];
       paths.wallpaperDir = "~/Pictures/Wallpapers";
+      general.idle.timeouts = [
+        # lock screen.
+        {
+          timeout = 180;
+          idleAction = "lock";
+          inhibitWhenAudio = false;
+          inhibitWhenCharging = false;
+        }
+        {
+          timeout = 300;
+          idleAction = "wlopm --off '*'";
+          inhibitWhenAudio = false;
+          inhibitWhenCharging = false;
+        }
+        {
+          timeout = 600;
+          idleActuin = "systemctl suspend";
+        }
+      ];
     };
   };
 }

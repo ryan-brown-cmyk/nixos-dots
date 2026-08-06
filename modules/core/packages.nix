@@ -100,5 +100,6 @@ in
       ytmdl # Tool For Downloading Audio From YouTube
       python3 # Python 3 programming language
       firefox
+      wlopm
     ];
 }
